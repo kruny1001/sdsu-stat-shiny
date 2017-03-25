@@ -3,7 +3,6 @@ FROM rocker/shiny:latest
 MAINTAINER Kevin Son "eunwoo.son@sdstate.edu"
 
 # install additional packages
-RUN R -e ""
 
 COPY ./RSet /usr/local/src/myscripts
 WORKDIR /usr/local/src/myscripts
