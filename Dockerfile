@@ -1,27 +1,14 @@
-FROM r-base:latest
+FROM rocker/shiny:latest
 
 MAINTAINER Kevin Son "eunwoo.son@sdstate.edu"
 
-RUN apt-get update && apt-get install -y -t unstable \
-    sudo \
-    gdebi-core \
-    pandoc \
-    pandoc-citeproc \
-    libcurl4-gnutls-dev \
-    libcairo2-dev/unstable \
-    libxt-dev
+# install additional packages
+RUN R -e ""
 
-# Download and install shiny server
-RUN wget --no-verbose https://s3.amazonaws.com/rstudio-shiny-server-os-build/ubuntu-12.04/x86_64/VERSION -O "version.txt" && \
-    VERSION=$(cat version.txt)  && \
-    wget --no-verbose "https://s3.amazonaws.com/rstudio-shiny-server-os-build/ubuntu-12.04/x86_64/shiny-server-$VERSION-amd64.deb" -O ss-latest.deb && \
-    gdebi -n ss-latest.deb && \
-    rm -f version.txt ss-latest.deb && \
-    R -e "install.packages(c('shiny', 'rmarkdown'), repos='https://cran.rstudio.com/')" && \
-    cp -R /usr/local/lib/R/site-library/shiny/examples/* /srv/shiny-server/
+COPY ./RSet /usr/local/src/myscripts
+WORKDIR /usr/local/src/myscripts
 
-EXPOSE 3838
-
-COPY shiny-server.sh /usr/bin/shiny-server.sh
+CMD ["Rscript", "packages.R"]
+CMD ["Rscript", "bioLitePackages.R"]
 
 CMD ["/usr/bin/shiny-server.sh"]

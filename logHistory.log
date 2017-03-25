@@ -1,0 +1,10 @@
+
+Listening on http://127.0.0.1:33400
+Warning: Error in library: there is no package called ‘RSQLite’
+Stack trace (innermost first):
+    40: library
+     1: runApp
+Error in library(RSQLite) : there is no package called ‘RSQLite’
+
+Solution
+R -e "install.packages('RSQLite')"
